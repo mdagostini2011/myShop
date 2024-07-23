@@ -23,6 +23,6 @@ class CounterProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant CounterProvider oldWidget) {
-    return oldWidget.state.diff(state);
+    throw oldWidget.state.diff(state);
   }
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../components/product_grid.dart';
+import '../models/cart.dart';
+import '../utils/app_routes.dart';
 
 enum FilterOptions {
   favorite,
@@ -9,17 +12,16 @@ enum FilterOptions {
 class ProductsOverviewPage extends StatefulWidget {
   const ProductsOverviewPage({super.key});
 
+
   @override
   State<ProductsOverviewPage> createState() => _ProductsOverviewPageState();
 }
 
 class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
-
   bool _showFavoriteOnly = false;
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Minha Loja'),
@@ -37,13 +39,26 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
               ),
             ],
             onSelected: (FilterOptions selectedValue) {
-              if(selectedValue == FilterOptions.favorite) {
-                _showFavoriteOnly = true;
-              } else {
-                _showFavoriteOnly = false;
+              setState(() {
+                if(selectedValue == FilterOptions.favorite) {
+                  _showFavoriteOnly = true;
+                } else {
+                  _showFavoriteOnly = false;
+                }
+              });
               }
-              print(_showFavoriteOnly);
-            },
+          ),
+          Consumer<Cart>(
+            child:  IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoutes.cart);
+              },
+                icon: const Icon(Icons.shopping_cart),
+            ),
+            builder: (ctx, cart, child) => Badge(
+              label: Text(cart.itemsCount.toString()),
+              child: child!,
+            ),
           ),
         ],
       ),
